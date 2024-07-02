@@ -22,6 +22,9 @@ $(OUT_DIR)/index.html: header-validation/mock-index.html $(OUT_DIR)
 $(OUT_DIR)/validate-headers.html: header-validation/index.html $(OUT_DIR)
 	@ cp $< $@
 
+$(OUT_DIR)/validate-headers.html: header-validation/validate-headers.html $(OUT_DIR)
+	@ cp $< $@
+
 $(OUT_DIR)/style.css: header-validation/style.css $(OUT_DIR)
 	@ cp $< $@
 
