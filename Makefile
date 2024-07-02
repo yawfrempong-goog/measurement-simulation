@@ -1,5 +1,3 @@
-# Generates output files for header validation tool
-
 SHELL = /bin/bash
 OUT_DIR ?= out
 OUT_DIR_SUB ?= out/dist
@@ -16,10 +14,7 @@ $(OUT_DIR):
 $(OUT_DIR_SUB):
 	@ mkdir -p $@
 
-$(OUT_DIR)/index.html: header-validation/mock-index.html $(OUT_DIR)
-	@ cp $< $@
-
-$(OUT_DIR)/validate-headers.html: header-validation/index.html $(OUT_DIR)
+$(OUT_DIR)/index.html: header-validation/index.html $(OUT_DIR)
 	@ cp $< $@
 
 $(OUT_DIR)/validate-headers.html: header-validation/validate-headers.html $(OUT_DIR)
