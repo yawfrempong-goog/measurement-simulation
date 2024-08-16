@@ -136,6 +136,39 @@ const redirectTestCases = [
             errors: ["invalid URL format: `attribution-reporting-redirect`"],
             warnings: []
         }
+    },
+    {
+        name: "Expected Value - Redirect Headers",
+        flags: {
+            "max_registration_redirects": 2
+        },
+        json: "{"
+                + "\"Location\":\"https://web-destination-1.test\","
+                + "\"Attribution-Reporting-Redirect\":[\"https://web-destination-2.test\", \"https://web-destination-3.test\", 0],"
+                + "\"Attribution-Reporting-Redirect-Config\":\"redirect-302-to-well-known\""
+            + "}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: ["max allowed reporting redirects: 2, all other reporting redirects will be ignored: `attribution-reporting-redirect`"]
+        },
+        expected_value: {
+            "location": [{
+                uri: "https://web-destination-1.test/.well-known/attribution-reporting/register-redirect?302_url=https%3A%2F%2Fweb-destination-1.test",
+                redirect_behavior: "LOCATION_TO_WELL_KNOWN"
+            }],
+            "attribution-reporting-redirect": [
+                {
+                    uri: "https://web-destination-2.test",
+                    redirect_behavior: "AS_IS"
+                },
+                {
+                    uri: "https://web-destination-3.test",
+                    redirect_behavior: "AS_IS"
+                }
+            ],
+            "attribution-reporting-redirect-config": "redirect-302-to-well-known"
+        }
     }
 ]
 

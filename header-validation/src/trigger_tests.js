@@ -114,8 +114,7 @@ const triggerTestCases = [
     {
         name: "(Disabled) Attribution Scopes | Valid",
         flags: {
-            "feature-attribution-scopes": false,
-            "header_type": "trigger"
+            "feature-attribution-scopes": false
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":{}}",
         result: {
@@ -127,8 +126,7 @@ const triggerTestCases = [
     {
         name: "(Non-Array) Attribution Scopes | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "trigger"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":{}}",
         result: {
@@ -140,8 +138,7 @@ const triggerTestCases = [
     {
         name: "(Non-String Array) Attribution Scopes | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "trigger"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"a\", 1, \"b\"]}",
         result: {
@@ -154,8 +151,7 @@ const triggerTestCases = [
         name: "(Exceeded Max Number of Scopes Per Source) Attribution Scopes | Invalid",
         flags: {
             "feature-attribution-scopes": true,
-            "max_attribution_scopes_per_source": 2,
-            "header_type": "trigger"
+            "max_32_bit_integer": 2
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"a\", \"b\", \"c\"]}",
         result: {
@@ -168,9 +164,7 @@ const triggerTestCases = [
         name: "(Exceeded Max String Length Per Scope) Attribution Scopes | Invalid",
         flags: {
             "feature-attribution-scopes": true,
-            "max_attribution_scopes_per_source": 2,
-            "max_attribution_scope_string_length": 5,
-            "header_type": "trigger"
+            "max_32_bit_integer": 5
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"123456\"]}",
         result: {
@@ -2624,18 +2618,6 @@ const triggerTestCases = [
         }
     },
     {
-        name: "(Positive `deduplication_key`) Aggregatable Deduplication Keys | Valid",
-        flags: {
-            "max_aggregate_deduplication_keys_per_registration": 2
-        },
-        json: "{\"aggregatable_deduplication_keys\":[{\"deduplication_key\":\"1\"}]}",
-        result: {
-            valid: true,
-            errors: [],
-            warnings: []
-        }
-    },
-    {
         name: "(Non-Array/Non-Object `filters`) Aggregatable Deduplication Keys | Invalid",
         flags: {
             "max_aggregate_deduplication_keys_per_registration": 2
@@ -4085,6 +4067,315 @@ const triggerTestCases = [
             valid: false,
             errors: ["must be a string: `debug_key`"],
             warnings: []
+        }
+    },
+    {
+        name: "(Lower Limit 'source_expiry_override') Expected Value - Attribution Config",
+        flags: {
+            "feature-source-registration-time-optional-for-agg-reports": true,
+            "feature-xna": true,
+            "min_reporting_register_source_expiration_in_seconds": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_reporting_register_source_expiration_in_seconds": 30 * 24 * 60 * 60 // 30 days -> secs
+        },
+        json: "{\"attribution_config\":[{\"source_network\":\"A\", \"source_expiry_override\":\"-1\"}]}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "attribution_config": "[{\"source_network\":\"A\",\"source_expiry_override\":86400}]",
+            "event_trigger_data": "[]",
+            "filters": null,
+            "not_filters": null,
+            "aggregatable_trigger_data": null,
+            "aggregatable_values": null,
+            "aggregatable_deduplication_keys": null,
+            "debug_key": null,
+            "debug_reporting": false,
+            "x_network_key_mapping": null,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "aggregation_coordinator_origin": null,
+            "aggregatable_source_registration_time": "EXCLUDE",
+            "trigger_context_id": null,
+            "attribution_scopes": null
+        }
+    },
+    {
+        name: "(Upper Limit 'source_expiry_override') Expected Value - Attribution Config",
+        flags: {
+            "feature-source-registration-time-optional-for-agg-reports": true,
+            "feature-xna": true,
+            "min_reporting_register_source_expiration_in_seconds": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_reporting_register_source_expiration_in_seconds": 30 * 24 * 60 * 60 // 30 days -> secs
+        },
+        json: "{\"attribution_config\":[{\"source_network\":\"A\", \"source_expiry_override\":\"2592001\"}]}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "attribution_config": "[{\"source_network\":\"A\",\"source_expiry_override\":2592000}]",
+            "event_trigger_data": "[]",
+            "filters": null,
+            "not_filters": null,
+            "aggregatable_trigger_data": null,
+            "aggregatable_values": null,
+            "aggregatable_deduplication_keys": null,
+            "debug_key": null,
+            "debug_reporting": false,
+            "x_network_key_mapping": null,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "aggregation_coordinator_origin": null,
+            "aggregatable_source_registration_time": "EXCLUDE",
+            "trigger_context_id": null,
+            "attribution_scopes": null
+        }
+    },
+    {
+        name: "(Lower Limit 'expiry') Expected Value - Attribution Config",
+        flags: {
+            "feature-source-registration-time-optional-for-agg-reports": true,
+            "feature-xna": true,
+            "min_reporting_register_source_expiration_in_seconds": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_reporting_register_source_expiration_in_seconds": 30 * 24 * 60 * 60 // 30 days -> secs
+        },
+        json: "{\"attribution_config\":[{\"source_network\":\"A\", \"expiry\":\"-1\"}]}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "attribution_config": "[{\"source_network\":\"A\",\"expiry\":86400}]",
+            "event_trigger_data": "[]",
+            "filters": null,
+            "not_filters": null,
+            "aggregatable_trigger_data": null,
+            "aggregatable_values": null,
+            "aggregatable_deduplication_keys": null,
+            "debug_key": null,
+            "debug_reporting": false,
+            "x_network_key_mapping": null,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "aggregation_coordinator_origin": null,
+            "aggregatable_source_registration_time": "EXCLUDE",
+            "trigger_context_id": null,
+            "attribution_scopes": null
+        }
+    },
+    {
+        name: "(Upper Limit 'expiry') Expected Value - Attribution Config",
+        flags: {
+            "feature-source-registration-time-optional-for-agg-reports": true,
+            "feature-xna": true,
+            "min_reporting_register_source_expiration_in_seconds": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_reporting_register_source_expiration_in_seconds": 30 * 24 * 60 * 60 // 30 days -> secs
+        },
+        json: "{\"attribution_config\":[{\"source_network\":\"A\", \"expiry\":\"2592001\"}]}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "attribution_config": "[{\"source_network\":\"A\",\"expiry\":2592000}]",
+            "event_trigger_data": "[]",
+            "filters": null,
+            "not_filters": null,
+            "aggregatable_trigger_data": null,
+            "aggregatable_values": null,
+            "aggregatable_deduplication_keys": null,
+            "debug_key": null,
+            "debug_reporting": false,
+            "x_network_key_mapping": null,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "aggregation_coordinator_origin": null,
+            "aggregatable_source_registration_time": "EXCLUDE",
+            "trigger_context_id": null,
+            "attribution_scopes": null
+        }
+    },
+    {
+        name: "(Trigger Data Missing) Expected Value - Event Trigger Data",
+        flags: {
+            "feature-source-registration-time-optional-for-agg-reports": true,
+            "feature-enable-update-trigger-header-limit": false,
+            "max_bucket_threshold": (1n << 32n) - 1n,
+            "max_filter_maps_per_filter_set": 20,
+            "max_attribution_filters": 50,
+            "max_values_per_attribution_filter": 50,
+            "max_bytes_per_attribution_filter_string": 25
+            
+        },
+        json: "{\"event_trigger_data\":[{\"priority\":\"-1\"}]}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "attribution_config": null,
+            "event_trigger_data": "[{\"trigger_data\":0,\"priority\":-1}]",
+            "filters": null,
+            "not_filters": null,
+            "aggregatable_trigger_data": null,
+            "aggregatable_values": null,
+            "aggregatable_deduplication_keys": null,
+            "debug_key": null,
+            "debug_reporting": false,
+            "x_network_key_mapping": null,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "aggregation_coordinator_origin": null,
+            "aggregatable_source_registration_time": "EXCLUDE",
+            "trigger_context_id": null,
+            "attribution_scopes": null
+        }
+    },
+    {
+        name: "Expected Value - Populated Fields",
+        flags: {
+            "feature-source-registration-time-optional-for-agg-reports": true,
+            "feature-attribution-scopes": true,
+            "feature-xna": true,
+            "feature-aggregation-coordinator-origin": true,
+            "feature-source-registration-time-optional-for-agg-reports": true,
+            "feature-trigger-context-id": true,
+            "feature-lookback-window-filter": true,
+            "max_attribution_filters": 50,
+            "max_bytes_per_attribution_filter_string": 25,
+            "max_values_per_attribution_filter": 50,
+            "max_distinct_web_destinations_in_source_registration": 3,
+            "max_web_destination_hostname_character_length": 253,
+            "max_web_destination_hostname_parts": 127,
+            "min_web_destination_hostname_part_character_length": 1,
+            "max_web_destination_hostname_part_character_length": 63,
+            "max_aggregate_keys_per_source_registration": 50,
+            "max_bytes_per_attribution_aggregate_key_id": 25,
+            "min_bytes_per_aggregate_value": 3,
+            "max_bytes_per_aggregate_value": 34,
+            "max_32_bit_integer": Math.pow(2, 31) - 1,
+            "max_report_states_per_source_registration": (1n << 32n) - 1n,
+            "max_trigger_context_id_string_length": 64,
+            "max_bucket_threshold": (1n << 32n) - 1n,
+            "max_filter_maps_per_filter_set": 20,
+            "max_aggregate_keys_per_trigger_registration": 50,
+            "max_sum_of_aggregate_values_per_source": 65536,
+            "max_aggregate_deduplication_keys_per_registration": 50,
+            "min_reporting_register_source_expiration_in_seconds": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_reporting_register_source_expiration_in_seconds": 30 * 24 * 60 * 60, // 30 days -> secs
+            "minimum_event_report_window_in_seconds": 1 * 60 * 60, // 1 hour -> secs
+            "minimum_aggregatable_report_window_in_seconds": 1 * 60 * 60, // 1 hour -> secs
+            "min_install_attribution_window": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_install_attribution_window": 30 * 24 * 60 * 60, // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_post_install_exclusivity_window": 30 * 24 * 60 * 60, // 30 days -> secs
+            "max_reinstall_reattribution_window_seconds": 90 * 24 * 60 * 60, // 90 days -> secs
+            "max_registration_redirects": 20
+        },
+        json: "{"
+                + "\"attribution_config\": [{"
+                    + "\"source_network\":1,"
+                    + "\"source_priority_range\":{\"start\":\"1\", \"end\":\"2\"},"
+                    + "\"source_filters\":[{\"_lookback_window\":\"-1\"}, {\"_lookback_window\":\"-3\", \"filter_1\":[\"A\", 2]}],"
+                    + "\"source_not_filters\":{\"filter_1\":[\"A\", 2, true], \"_lookback_window\":-1},"
+                    + "\"source_expiry_override\":\"86401\","
+                    + "\"priority\":\"2\","
+                    + "\"expiry\":\"86402\","
+                    + "\"filter_data\":[{\"_lookback_window\":-2, \"filter_1\":[1, 2]}],"
+                    + "\"post_install_exclusivity_window\":\"1\","
+                    + "\"extra_key\":\"1\""
+                + "}],"
+                + "\"event_trigger_data\": [{"
+                    + "\"trigger_data\":\"1\","
+                    + "\"priority\":\"-1\","
+                    + "\"value\":1,"
+                    + "\"deduplication_key\":\"1\","
+                    + "\"filters\":[{\"_lookback_window\":\"0\", \"filter_1\":[\"A\", \"B\"]}, {\"filter_2\":[\"C\", \"D\"]}],"
+                    + "\"not_filters\":{\"_lookback_window\":1, \"filter_3\":[\"E\", \"F\"]},"
+                    + "\"extra_key\":\"1\""
+                + "}],"
+                + "\"filters\":[{\"_lookback_window\":\"2\", \"filter_4\":[\"G\"]}, {\"filter_5\":[\"H\", \"I\"]}],"
+                + "\"not_filters\": {\"_lookback_window\":3, \"filter_6\":[\"J\", \"K\"]},"
+                + "\"aggregatable_trigger_data\": [{"
+                    + "\"key_piece\":\"0x1\","
+                    + "\"source_keys\":[\"1\",\"2\"],"
+                    + "\"filters\":[{\"_lookback_window\":4, \"filter_7\":[\"L\"]}, {\"filter_8\":[\"M\", \"N\"]}],"
+                    + "\"not_filters\":{\"_lookback_window\":\"5\", \"filter_9\":[\"O\", \"P\"]},"
+                    + "\"extra_key\":1"
+                + "}],"
+                + "\"aggregatable_values\":{\"abc\":10},"
+                + "\"aggregatable_deduplication_keys\": [{"
+                    + "\"deduplication_key\":\"3\","
+                    + "\"filters\":[{\"_lookback_window\":6, \"filter_10\":[\"Q\"]}, {\"filter_11\":[\"R\", \"S\"]}],"
+                    + "\"not_filters\":{\"_lookback_window\":\"7\", \"filter_12\":[\"T\", \"U\"]},"
+                    + "\"extra_key\":1"
+                + "}],"
+                + "\"debug_key\": \"1000\","
+                + "\"debug_reporting\": \"true\","
+                + "\"debug_join_key\": 100,"
+                + "\"debug_ad_id\": 200,"
+                + "\"x_network_key_mapping\": {\"key1\":\"0x1\", \"key2\":\"0x2\"},"
+                + "\"aggregation_coordinator_origin\": \"https://valid.cloud.coordination.test\","
+                + "\"aggregatable_source_registration_time\": \"exclude\","
+                + "\"trigger_context_id\":\"1\","
+                + "\"attribution_scopes\": [\"a\", \"b\", \"c\"]"
+            + "}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "attribution_config": "[{"
+                + "\"source_network\":\"1\","
+                + "\"source_priority_range\":{\"start\":1,\"end\":2},"
+                + "\"source_filters\":[{\"_lookback_window\":-1},{\"_lookback_window\":-3,\"filter_1\":[\"A\",\"2\"]}],"
+                + "\"source_not_filters\":[{\"filter_1\":[\"A\",\"2\",\"true\"],\"_lookback_window\":-1}],"
+                + "\"source_expiry_override\":86401,"
+                + "\"priority\":2,"
+                + "\"expiry\":86402,"
+                + "\"filter_data\":[{\"_lookback_window\":-2,\"filter_1\":[\"1\",\"2\"]}],"
+                + "\"post_install_exclusivity_window\":1"
+            + "}]",
+            "event_trigger_data": "[{"
+                + "\"trigger_data\":1,"
+                + "\"priority\":-1,"
+                + "\"value\":1,"
+                + "\"deduplication_key\":1,"
+                + "\"filters\":[{\"_lookback_window\":\"0\",\"filter_1\":[\"A\",\"B\"]},{\"filter_2\":[\"C\",\"D\"]}],"
+                + "\"not_filters\":[{\"_lookback_window\":1,\"filter_3\":[\"E\",\"F\"]}]"
+            + "}]",
+            "filters": "[{\"_lookback_window\":\"2\",\"filter_4\":[\"G\"]},{\"filter_5\":[\"H\",\"I\"]}]",
+            "not_filters": "[{\"_lookback_window\":3,\"filter_6\":[\"J\",\"K\"]}]",
+            "aggregatable_trigger_data": "[{"
+                + "\"key_piece\":\"0x1\","
+                + "\"source_keys\":[\"1\",\"2\"],"
+                + "\"filters\":[{\"_lookback_window\":4,\"filter_7\":[\"L\"]},{\"filter_8\":[\"M\",\"N\"]}],"
+                + "\"not_filters\":[{\"_lookback_window\":\"5\",\"filter_9\":[\"O\",\"P\"]}],"
+                + "\"extra_key\":1"
+            + "}]",
+            "aggregatable_values": "{\"abc\":10}",
+            "aggregatable_deduplication_keys": "[{"
+                + "\"deduplication_key\":3,"
+                + "\"filters\":[{\"_lookback_window\":6,\"filter_10\":[\"Q\"]},{\"filter_11\":[\"R\",\"S\"]}],"
+                + "\"not_filters\":[{\"_lookback_window\":\"7\",\"filter_12\":[\"T\",\"U\"]}]"
+            + "}]",
+            "debug_key": 1000,
+            "debug_reporting": true,
+            "x_network_key_mapping": "{\"key1\":\"0x1\",\"key2\":\"0x2\"}",
+            "debug_join_key": "100",
+            "debug_ad_id": "200",
+            "aggregation_coordinator_origin": "https://valid.cloud.coordination.test",
+            "aggregatable_source_registration_time": "EXCLUDE",
+            "trigger_context_id": "1",
+            "attribution_scopes": "[\"a\",\"b\",\"c\"]"
         }
     }
 ]

@@ -277,13 +277,13 @@ const sourceTestCases = [
     {
         name: "(Invalid Last Hostname Part Starting Character) Web Destination | Invalid",
         flags: {
-            "max_distinct_web_destinations_in_source_registration": 1,
+            "max_distinct_web_destinations_in_source_registration": 2,
             "max_web_destination_hostname_character_length": 253,
             "max_web_destination_hostname_parts": 127,
             "min_web_destination_hostname_part_character_length": 1,
             "max_web_destination_hostname_part_character_length": 63
         },
-        json: "{\"web_destination\":[\"https://ab.cde.1com\"]}",
+        json: "{\"web_destination\":[\"https://127.0.0.1:8080\", \"https://ab.cde.1com\"]}",
         result: {
             valid: false,
             errors: ["last hostname part can not start with a number: `web_destination`"],
@@ -1277,8 +1277,7 @@ const sourceTestCases = [
     {
         name: "(Disabled) Attribution Scopes | Valid",
         flags: {
-            "feature-attribution-scopes": false,
-            "header_type": "source"
+            "feature-attribution-scopes": false
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":{}}",
         result: {
@@ -1290,8 +1289,7 @@ const sourceTestCases = [
     {
         name: "(Non-Array) Attribution Scopes | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":{}}",
         result: {
@@ -1303,8 +1301,7 @@ const sourceTestCases = [
     {
         name: "(Missing Limit - Non-Empty Array) Attribution Scopes | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"a\"]}",
         result: {
@@ -1316,8 +1313,7 @@ const sourceTestCases = [
     {
         name: "(Missing Limit - Max Event States Present) Attribution Scopes | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"max_event_states\":\"2\"}",
         result: {
@@ -1329,8 +1325,7 @@ const sourceTestCases = [
     {
         name: "(Missing Limit - Empty Array) Attribution Scopes | Valid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[]}",
         result: {
@@ -1342,8 +1337,7 @@ const sourceTestCases = [
     {
         name: "(Limit Present - Empty Array) Attribution Scopes | Valid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":\"5\"}",
         result: {
@@ -1355,8 +1349,7 @@ const sourceTestCases = [
     {
         name: "(Limit Present - Exceeds Limit) Attribution Scopes | Valid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"a\", \"b\", \"c\"], \"attribution_scope_limit\":\"2\"}",
         result: {
@@ -1368,8 +1361,7 @@ const sourceTestCases = [
     {
         name: "(Non-String Array) Attribution Scopes | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"a\", 1, \"b\"], \"attribution_scope_limit\":\"5\"}",
         result: {
@@ -1382,8 +1374,7 @@ const sourceTestCases = [
         name: "(Exceeded Max Number of Scopes Per Source) Attribution Scopes | Invalid",
         flags: {
             "feature-attribution-scopes": true,
-            "max_attribution_scopes_per_source": 2,
-            "header_type": "source"
+            "max_32_bit_integer": 2
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"a\", \"b\", \"c\"], \"attribution_scope_limit\":\"5\"}",
         result: {
@@ -1396,9 +1387,7 @@ const sourceTestCases = [
         name: "(Exceeded Max String Length Per Scope) Attribution Scopes | Invalid",
         flags: {
             "feature-attribution-scopes": true,
-            "max_attribution_scopes_per_source": 2,
-            "max_attribution_scope_string_length": 5,
-            "header_type": "source"
+            "max_32_bit_integer": 5
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[\"123456\"], \"attribution_scope_limit\":\"5\"}",
         result: {
@@ -1410,8 +1399,7 @@ const sourceTestCases = [
     {
         name: "(Zero) Attribution Scope Limit | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":\"0\"}",
         result: {
@@ -1423,8 +1411,7 @@ const sourceTestCases = [
     {
         name: "(Non-String) Attribution Scope Limit | Valid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":2}",
         result: {
@@ -1436,8 +1423,7 @@ const sourceTestCases = [
     {
         name: "(String) Attribution Scope Limit | Valid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":\"2\"}",
         result: {
@@ -1449,8 +1435,7 @@ const sourceTestCases = [
     {
         name: "(Zero) Max Event States | Invalid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":\"2\", \"max_event_states\":\"0\"}",
         result: {
@@ -1462,8 +1447,7 @@ const sourceTestCases = [
     {
         name: "(Non-String) Max Event States | Valid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":\"2\", \"max_event_states\":3}",
         result: {
@@ -1475,8 +1459,7 @@ const sourceTestCases = [
     {
         name: "(String) Max Event States | Valid",
         flags: {
-            "feature-attribution-scopes": true,
-            "header_type": "source"
+            "feature-attribution-scopes": true
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":\"2\", \"max_event_states\":\"3\"}",
         result: {
@@ -1489,8 +1472,7 @@ const sourceTestCases = [
         name: "(Exceeds Max Report States Per Source Registration) Max Event States | Invalid",
         flags: {
             "feature-attribution-scopes": true,
-            "max_report_states_per_source_registration": ((1n << 2n) - 1n),
-            "header_type": "source"
+            "max_report_states_per_source_registration": ((1n << 2n) - 1n)
         },
         json: "{\"destination\":\"android-app://com.myapps\", \"attribution_scopes\":[], \"attribution_scope_limit\":\"2\", \"max_event_states\":\"4\"}",
         result: {
@@ -1570,7 +1552,8 @@ const sourceTestCases = [
             "feature-shared-filter-data-keys": true,
             "feature-preinstall-check": true,
             "feature-enable-update-trigger-header-limit": false,
-            "feature-lookback-window-filter": true
+            "feature-lookback-window-filter": true,
+            "feature-enable-reinstall-reattribution": true
         },
         json: "{"
                 + "\"destination\":\"android-app://com.myapps\","
@@ -1614,7 +1597,1138 @@ const sourceTestCases = [
             errors: ["invalid URL format: `destination`"],
             warnings: []
         }
-    }
+    },
+    {
+        name: "(Lower Limit) Expected Value - Expiry",
+        source_type: "event",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": null,
+            "aggregatable_report_window": 86400000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit) Expected Value - Expiry",
+        source_type: "event",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Round Up - Null Source Type) Expected Value - Expiry",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":129600}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 129600,
+            "event_report_window": null,
+            "aggregatable_report_window": 129600000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Round Up - Navigation Source Type) Expected Value - Expiry",
+        source_type: "navigation",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":129600}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 129600,
+            "event_report_window": null,
+            "aggregatable_report_window": 129600000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Round Up - Event Source Type) Expected Value - Expiry",
+        source_type: "event",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":129600}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 172800,
+            "event_report_window": null,
+            "aggregatable_report_window": 172800000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Lower Limit) Expected Value - Event Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_event_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"event_report_window\":0}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": 3600000,
+            "aggregatable_report_window": 86400000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(In-Range - Expiry is Min) Expected Value - Event Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_event_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"event_report_window\":86401}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": 86400000,
+            "aggregatable_report_window": 86400000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(In-Range - Expiry is Not Min) Expected Value - Event Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_event_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"event_report_window\":3601}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": 3601000,
+            "aggregatable_report_window": 86400000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit - Expiry is Min) Expected Value - Event Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_event_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"event_report_window\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": 86400000,
+            "aggregatable_report_window": 86400000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit - Expiry is Not Min) Expected Value - Event Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_event_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"event_report_window\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": 2592000000,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Lower Limit) Expected Value - Aggregatable Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_aggregatable_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"aggregatable_report_window\":0}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window":null,
+            "aggregatable_report_window": 3600000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(In-Range - Expiry is Min) Expected Value - Aggregatable Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_aggregatable_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"aggregatable_report_window\":86401}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": null,
+            "aggregatable_report_window": 86400000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(In-Range - Expiry is Not Min) Expected Value - Aggregatable Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_aggregatable_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"aggregatable_report_window\":3601}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": null,
+            "aggregatable_report_window": 3601000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit - Expiry is Min) Expected Value - Aggregatable Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_aggregatable_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"expiry\":0, \"aggregatable_report_window\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86400,
+            "event_report_window": null,
+            "aggregatable_report_window": 86400000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit - Expiry is Not Min) Expected Value - Aggregatable Report Window",
+        flags: {
+            "min_reporting_register_source_expiration_in_seconds": (1 * 24 * 60 * 60), // 1 days -> secs
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "minimum_aggregatable_report_window_in_seconds": (1 * 60 * 60), // 1 hour -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"aggregatable_report_window\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Lower Limit) Expected Value - Install Attribution Window",
+        flags: {
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_install_attribution_window": (1 * 24 * 60 * 60), // 1 day -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"install_attribution_window\":0}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 86400000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit) Expected Value - Install Attribution Window",
+        flags: {
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_install_attribution_window": (1 * 24 * 60 * 60), // 1 day -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"install_attribution_window\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(In-Range) Expected Value - Install Attribution Window",
+        flags: {
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_install_attribution_window": (1 * 24 * 60 * 60), // 1 day -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"install_attribution_window\":86401}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 86401000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Lower Limit) Expected Value - Post Install Exclusivity Window",
+        flags: {
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_post_install_exclusivity_window": (30 * 24 * 60 * 60) // 30 days -> secs
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"post_install_exclusivity_window\":-1}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit) Expected Value - Post Install Exclusivity Window",
+        flags: {
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_post_install_exclusivity_window": (30 * 24 * 60 * 60) // 30 days -> secs
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"post_install_exclusivity_window\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 2592000000,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(In-Range) Expected Value - Post Install Exclusivity Window",
+        flags: {
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_post_install_exclusivity_window": (30 * 24 * 60 * 60) // 30 days -> secs
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"post_install_exclusivity_window\":1}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 1000,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Lower Limit) Expected Value - Reinstall Reattribution Window",
+        flags: {
+            "feature-enable-reinstall-reattribution": true,
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_post_install_exclusivity_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_reinstall_reattribution_window_seconds": (90 * 24 * 60 * 60) // 90 days -> secs
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"reinstall_reattribution_window\":-1}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 0,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(Upper Limit) Expected Value - Reinstall Reattribution Window",
+        flags: {
+            "feature-enable-reinstall-reattribution": true,
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_reinstall_reattribution_window_seconds": (90 * 24 * 60 * 60) // 90 days -> secs
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"reinstall_reattribution_window\":9999999}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 7776000000,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "(In-Range) Expected Value - Reinstall Reattribution Window",
+        flags: {
+            "feature-enable-reinstall-reattribution": true,
+            "max_reporting_register_source_expiration_in_seconds": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_install_attribution_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_post_install_exclusivity_window": (30 * 24 * 60 * 60), // 30 days -> secs
+            "max_reinstall_reattribution_window_seconds": (90 * 24 * 60 * 60) // 90 days -> secs
+        },
+        json: "{\"destination\":\"android-app://com.myapps\", \"reinstall_reattribution_window\":1}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 0,
+            "debug_key": null,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 2592000,
+            "event_report_window": null,
+            "aggregatable_report_window": 2592000000,
+            "priority": 0,
+            "install_attribution_window": 2592000000,
+            "post_install_exclusivity_window": 0,
+            "reinstall_reattribution_window": 1000,
+            "filter_data": null,
+            "web_destination": null,
+            "aggregation_keys": null,
+            "shared_aggregation_keys": null,
+            "debug_reporting": false,
+            "debug_join_key": null,
+            "debug_ad_id": null,
+            "coarse_event_report_destinations": false,
+            "shared_debug_key": null,
+            "shared_filter_data_keys": null,
+            "drop_source_if_installed": false,
+            "trigger_data_matching": "MODULUS",
+            "attribution_scopes": null,
+            "attribution_scope_limit": null,
+            "max_event_states": 3
+        }
+    },
+    {
+        name: "Expected Value - Populated Fields",
+        flags: {
+            "feature-attribution-scopes": true,
+            "feature-trigger-data-matching": true,
+            "feature-coarse-event-report-destination": true,
+            "feature-shared-source-debug-key": true,
+            "feature-xna": true,
+            "feature-shared-filter-data-keys": true,
+            "feature-preinstall-check": true,
+            "feature-enable-update-trigger-header-limit": false,
+            "feature-lookback-window-filter": true,
+            "feature-enable-reinstall-reattribution": true,
+            "max_attribution_filters": 50,
+            "max_bytes_per_attribution_filter_string": 25,
+            "max_values_per_attribution_filter": 50,
+            "max_distinct_web_destinations_in_source_registration": 3,
+            "max_web_destination_hostname_character_length": 253,
+            "max_web_destination_hostname_parts": 127,
+            "min_web_destination_hostname_part_character_length": 1,
+            "max_web_destination_hostname_part_character_length": 63,
+            "max_aggregate_keys_per_source_registration": 50,
+            "max_bytes_per_attribution_aggregate_key_id": 25,
+            "min_bytes_per_aggregate_value": 3,
+            "max_bytes_per_aggregate_value": 34,
+            "max_32_bit_integer": Math.pow(2, 31) - 1,
+            "max_report_states_per_source_registration": (1n << 32n) - 1n,
+            "max_trigger_context_id_string_length": 64,
+            "max_bucket_threshold": (1n << 32n) - 1n,
+            "max_filter_maps_per_filter_set": 20,
+            "max_aggregate_keys_per_trigger_registration": 50,
+            "max_sum_of_aggregate_values_per_source": 65536,
+            "max_aggregate_deduplication_keys_per_registration": 50,
+            "min_reporting_register_source_expiration_in_seconds": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_reporting_register_source_expiration_in_seconds": 30 * 24 * 60 * 60, // 30 days -> secs
+            "minimum_event_report_window_in_seconds": 1 * 60 * 60, // 1 hour -> secs
+            "minimum_aggregatable_report_window_in_seconds": 1 * 60 * 60, // 1 hour -> secs
+            "min_install_attribution_window": 1 * 24 * 60 * 60, // 1 day -> secs
+            "max_install_attribution_window": 30 * 24 * 60 * 60, // 30 days -> secs
+            "min_post_install_exclusivity_window": 0,
+            "max_post_install_exclusivity_window": 30 * 24 * 60 * 60, // 30 days -> secs
+            "max_reinstall_reattribution_window_seconds": 90 * 24 * 60 * 60, // 90 days -> secs
+            "max_registration_redirects": 20
+        },
+        json: "{" +
+                    "\"source_event_id\": \"1234\"," +
+                    "\"debug_key\": \"1000\"," +
+                    "\"destination\": \"android-app://com.myapps\"," +
+                    "\"expiry\": \"86401\"," +
+                    "\"event_report_window\": \"3601\"," +
+                    "\"aggregatable_report_window\": \"3601\"," +
+                    "\"priority\": \"1\"," +
+                    "\"install_attribution_window\": \"86401\"," +
+                    "\"post_install_exclusivity_window\": \"1\"," +
+                    "\"reinstall_reattribution_window\": \"1\"," +
+                    "\"filter_data\": {\"filter_1\":[\"A\", \"B\"]}," +
+                    "\"web_destination\": \"https://web-destination.com\"," +
+                    "\"aggregation_keys\": {\"abc\":\"0x22\"}," +
+                    "\"shared_aggregation_keys\": [\"1\", 2]," +
+                    "\"debug_reporting\": \"true\"," +
+                    "\"debug_join_key\": 100," +
+                    "\"debug_ad_id\": 200," +
+                    "\"coarse_event_report_destinations\": \"TRUE\"," +
+                    "\"shared_debug_key\": \"300\"," +
+                    "\"shared_filter_data_keys\": [\"3\", 4]," +
+                    "\"drop_source_if_installed\": \"true\"," +
+                    "\"trigger_data_matching\": \"EXACT\"," +
+                    "\"attribution_scopes\": [\"a\", \"b\", \"c\"]," +
+                    "\"attribution_scope_limit\": \"4\"," +
+                    "\"max_event_states\": \"3\"" +
+                "}",
+        result: {
+            valid: true,
+            errors: [],
+            warnings: []
+        },
+        expected_value: {
+            "source_event_id": 1234,
+            "debug_key": 1000,
+            "destination": ["android-app://com.myapps"],
+            "expiry": 86401,
+            "event_report_window": 3601000,
+            "aggregatable_report_window": 3601000,
+            "priority": 1,
+            "install_attribution_window": 86401000,
+            "post_install_exclusivity_window": 1000,
+            "reinstall_reattribution_window": 1000,
+            "filter_data": "{\"filter_1\":[\"A\",\"B\"]}",
+            "web_destination": ["https://web-destination.com"],
+            "aggregation_keys": "{\"abc\":\"0x22\"}",
+            "shared_aggregation_keys": "[\"1\",2]",
+            "debug_reporting": true,
+            "debug_join_key": "100",
+            "debug_ad_id": "200",
+            "coarse_event_report_destinations": true,
+            "shared_debug_key": 300,
+            "shared_filter_data_keys": "[\"3\",4]",
+            "drop_source_if_installed": true,
+            "trigger_data_matching": "EXACT",
+            "attribution_scopes": ["a", "b", "c"],
+            "attribution_scope_limit": 4,
+            "max_event_states": 3
+        }
+    },
 ]
 
 module.exports = {

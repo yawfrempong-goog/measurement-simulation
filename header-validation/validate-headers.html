@@ -10,11 +10,18 @@
     <h1>Attribution Reporting Header Validation</h1>
     <form id=validation-form>
         <noscript>JavaScript is required to use this form.</noscript>
-        <!--Input Box-->
-        <fieldset id=input>
-            <legend>Value</legend>
-            <textarea id=input-text></textarea>
-        </fieldset>
+        <!--Input Options/Output Results-->
+        <div id="left">
+            <!--Input Box-->
+            <fieldset id=input>
+                <legend>Value</legend>
+                <textarea id=input-text></textarea>
+            </fieldset>
+            <fieldset>
+                <legend>Effective Value</legend>
+                <output><pre><code id=effective></code></pre></output>
+            </fieldset>
+        </div>
         <!--Input Options/Output Results-->
         <div id=right>
             <!--Input Options-->
@@ -30,7 +37,12 @@
                     <li>Attribution-Reporting-Redirect-Config</li>
                 </ul>
             </fieldset>
-
+            <!--Source Type-->
+            <fieldset id=source-type-options>
+                <legend>Source Type</legend>
+                <p><label><input type=radio name=source-type value=event checked>event</label>
+                <p><label><input type=radio name=source-type value=navigation>navigation</label>
+            </fieldset>
             <!--Output Results-->
             <fieldset id=output>
                 <legend>Validation Result</legend>
